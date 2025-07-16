@@ -56,7 +56,7 @@ module.exports = {
             const isBodyValid = errorHandlers.validateFields(body, fields)
             if(!isBodyValid) {
                 res.status(400)
-                res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+                return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
             }
 
         }
