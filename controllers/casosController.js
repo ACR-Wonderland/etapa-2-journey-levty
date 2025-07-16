@@ -1,5 +1,7 @@
 const casosRepository = require("../repositories/casosRepository")
+const errorHandlers = require("../utils/errorHandlers")
 
+const fields = ["titulo", "descricao", "status", "agente_id"]
 
 module.exports = {
 
@@ -24,17 +26,42 @@ module.exports = {
     },
     //POST /casos
     create: (req, res) => {
-         const fields = req.body
-         const newCaso =  casosRepository.append(fields)
-         res.status(201)
-         return res.json(newCaso)
+        const body = req.body
+        const isBodyValid = errorHandlers.validateFields(body,fields)
+        if(!isBodyValid) {
+        
+            res.status(400)
+            return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+
+        }
+        const newCaso =  casosRepository.append(body)
+        res.status(201)
+        return res.json(newCaso)
     },
     updateById: (req, res) => {
 
-        const fields = req.body
+        const body = req.body
         const {id} = req.params
+        if(req.method == "PATCH") {
 
-        const updatedCaso = casosRepository.update(fields, id)
+            const keysArray = Object.keys(body)
+            if(!errorHandlers.isSubset(keysArray,fields)) {
+                res.status(400)
+                return res.json({message: "Atributos inválidos"})
+            }
+        //PUT
+        } else {
+
+            const isBodyValid = errorHandlers.validateFields(body, fields)
+            if(!isBodyValid) {
+                res.status(400)
+                res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+            }
+
+        }
+          
+
+        const updatedCaso = casosRepository.update(body, id)
         if(!updatedCaso ) {
             res.status(404)
             return res.json({message: "Caso não encontrado"})
