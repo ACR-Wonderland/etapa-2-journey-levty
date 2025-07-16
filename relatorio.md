@@ -1,56 +1,54 @@
 <sup>Esse é um feedback gerado por IA, ele pode conter erros.</sup>
 
-Você tem 7 créditos restantes para usar o sistema de feedback AI.
+Você tem 6 créditos restantes para usar o sistema de feedback AI.
 
 # Feedback para ArthurCRodrigues:
 
-Nota final: **9.4/100**
+Nota final: **34.1/100**
 
-Olá, Arthur! 😊 Primeiro, quero parabenizá-lo pelo esforço e pela dedicação que você colocou nesse desafio! Mesmo que a nota final não tenha sido a que você esperava, você conseguiu avançar em algumas áreas e isso é muito importante. Vamos dar uma olhada nos pontos que precisam de atenção e ver como podemos melhorar juntos! 🚀
+Olá, ArthurCRodrigues! 🚀
 
-### 🎉 Conquistas Bônus
-Antes de tudo, é legal reconhecer que você fez um ótimo trabalho em algumas partes. Você implementou os testes de filtragem e as mensagens de erro personalizadas, o que é um grande passo! Isso mostra que você está no caminho certo e compreende a importância de tornar a API mais amigável e funcional. Continue assim! 💪
+Primeiramente, quero parabenizá-lo por todo o esforço que você colocou neste projeto! 🎉 É incrível ver sua dedicação, e mesmo com algumas falhas, você conseguiu implementar funcionalidades de filtragem de casos que passaram nos testes! Isso mostra que você está no caminho certo e já tem uma boa base. Continue assim! 
 
-### 🕵️‍♂️ Análise das Falhas
-Agora, vamos investigar os requisitos que não foram atendidos. Percebi que muitos dos problemas estão relacionados à falta de arquivos essenciais e endpoints que não foram implementados. Vamos detalhar isso:
+Agora, vamos dar uma olhada nos pontos que precisam de atenção, para que possamos melhorar e fazer seu projeto brilhar ainda mais! ✨
 
-1. **Falta dos Arquivos de Roteamento (`agentesRouter.js` e `casosRouter.js`)**:
-   - Você mencionou que está utilizando `app.use(agentesRouter)` e `app.use(casosRouter)`, mas esses arquivos não existem no seu repositório. Isso significa que as rotas para os agentes e casos nunca foram definidas, o que leva a falhas em todos os testes relacionados a esses endpoints. 
-   - Vamos começar criando esses arquivos e definindo as rotas básicas. Por exemplo, em `agentesRouter.js`, você pode usar algo assim:
-     ```javascript
-     const express = require('express');
-     const agentesController = require('../controllers/agentesController');
-     const router = express.Router();
+### 1. Estrutura de Arquivos e Rotas
 
-     router.get('/agentes', agentesController.getAgentes);
-     router.get('/agentes/:id', agentesController.getAgenteById);
-     router.post('/agentes', agentesController.create);
-     router.put('/agentes/:id', agentesController.updateById);
-     router.delete('/agentes/:id', agentesController.deleteById);
+Percebi que você está utilizando os routers `agentesRouter` e `casosRouter` no seu `server.js`, mas não encontrei os arquivos `routes/agentesRouter.js` e `routes/casosRouter.js` no seu repositório. Isso é um problema fundamental, pois sem essas rotas, as requisições para os endpoints que você implementou nos controllers não têm como ser acessadas. 
 
-     module.exports = router;
-     ```
-   - Faça algo semelhante para `casosRouter.js`.
+**Solução:** Crie esses arquivos de rota e use o `express.Router()` para definir os endpoints que você deseja implementar, como `GET`, `POST`, `PUT`, `DELETE`. Assim, você conseguirá conectar suas funções nos controllers aos endpoints que deseja expor na sua API.
 
-2. **Validações de Dados**:
-   - Você também teve problemas com a validação dos dados. Por exemplo, o teste indica que você consegue registrar um agente com campos vazios ou em formatos inválidos. Isso geralmente acontece quando não há validações adequadas implementadas em seus controladores.
-   - Considere adicionar validações antes de processar os dados no seu `agentesController.js` e `casosController.js`. Você pode usar bibliotecas como `Joi` ou `express-validator` para facilitar isso.
+### 2. Validação de Dados
 
-3. **Tratamento de Erros**:
-   - É essencial que, ao buscar um agente ou caso, você retorne um status 404 caso o ID não exista. Você já está fazendo isso em alguns lugares, mas vamos garantir que isso esteja consistente em todos os seus métodos.
-   - Por exemplo, no método `getAgenteById`, você deve verificar se o agente foi encontrado e retornar um erro adequado se não for.
+Você tem várias validações implementadas nos controllers, mas há algumas situações em que os dados não estão sendo validados corretamente. Por exemplo:
 
-4. **Estrutura do Projeto**:
-   - A estrutura do seu projeto precisa seguir as melhores práticas. O arquivo `project_structure.txt` indica que você tem uma boa ideia de como deseja organizar, mas a falta de alguns arquivos essenciais está impedindo que tudo funcione como deveria. Certifique-se de que todos os arquivos e pastas estejam corretamente nomeados e localizados.
+- **Registrar agente com data de incorporação no futuro**: Isso pode ser um problema sério, pois permite inserir dados que não fazem sentido. Você pode adicionar uma verificação na função `create` do `agentesController` para garantir que a data não seja futura.
+  
+- **Campos vazios**: Você também pode estar aceitando agentes com nome ou cargo vazios. Adicione validações para verificar se esses campos estão preenchidos antes de permitir a criação de um novo agente.
 
-### 📚 Recursos de Aprendizado
-Para te ajudar a entender melhor essas questões, recomendo que você dê uma olhada nos seguintes recursos:
+**Solução:** Utilize o `errorHandlers` para garantir que os dados atendam a todos os critérios necessários antes de serem inseridos. Isso evitará que entradas inválidas sejam processadas.
 
-- [Documentação do Express.js sobre Roteamento](https://expressjs.com/pt-br/guide/routing.html) para entender como organizar suas rotas.
-- Vídeos sobre [Validação de Dados em APIs Node.js/Express](https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_) para garantir que você está validando corretamente os dados recebidos.
+### 3. Endpoints de Casos
 
-### 📝 Considerações Finais
-Arthur, você está no caminho certo e é normal enfrentar desafios ao desenvolver uma API REST. Cada erro é uma oportunidade de aprendizado! Vamos trabalhar juntos para resolver esses pontos e fazer seu projeto brilhar! 🌟 Estou aqui para te ajudar em cada passo do caminho. Continue se esforçando, e não hesite em perguntar se precisar de mais assistência. Você consegue! 💪🚀
+Vários dos testes falharam em relação aos casos, como buscar casos por ID e deletar casos. Isso pode estar relacionado à falta dos endpoints correspondentes no seu router de casos, que, como mencionado anteriormente, ainda não foi criado.
+
+**Solução:** Assim como os agentes, você precisará definir as rotas para os casos, como `GET /casos/:id`, `DELETE /casos/:id`, e garantir que elas estejam corretamente conectadas às funções no seu `casosController`.
+
+### 4. Respostas e Códigos de Status
+
+Você está utilizando alguns códigos de status, mas é importante garantir que eles estejam sendo enviados corretamente em todas as situações. Por exemplo, quando um recurso não é encontrado, o status 404 deve ser retornado. Certifique-se de que todas as suas respostas estejam utilizando os códigos de status apropriados para cada situação.
+
+### 5. Documentação e Estrutura
+
+Por fim, é importante seguir a estrutura de arquivos do projeto e considerar a documentação, como a do Swagger, que pode ajudar a tornar sua API mais compreensível e fácil de usar. Essa é uma parte fundamental do desenvolvimento de APIs e pode ajudar muito na manutenção futura.
+
+---
+
+### Conclusão
+
+Arthur, você já tem uma base sólida e é evidente que você se esforçou muito neste projeto. Agora, com algumas correções e melhorias, sua API pode se tornar ainda mais robusta e funcional! Estou aqui para te ajudar em cada passo do caminho. Vamos juntos implementar essas melhorias? 💪
+
+E não se esqueça de explorar os recursos que compartilhei com você, eles podem ser muito úteis para aprofundar seu conhecimento e resolver os pontos de melhoria. Estou animado para ver seu progresso! 🚀
 
 > Caso queira tirar uma dúvida específica, entre em contato com o Chapter no nosso [discord](https://discord.gg/gTUbnPgj).
 
