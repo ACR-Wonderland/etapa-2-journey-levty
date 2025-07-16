@@ -13,7 +13,7 @@ jobs:
   grading:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.actor != 'github-classroom[bot]' && github.actor != 'ArthurCRodrigues' 
+    if: github.actor != 'github-classroom[bot]'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
            path: submission
 
       - name: Check repository criteria
-        uses: webtech-network/autograder@web-01-2
+        uses: webtech-network/autograder@web-02-test
         with: 
           redis_name: ${{ secrets.REDIS_NAME }}
           redis_url: ${{ secrets.REDIS_URL }}
