@@ -4,7 +4,7 @@ const casos = []
 module.exports = {
     findAll: () => casos,
 
-    findById:   async  (id)  => {
+    findById: (id)  => {
         const target =  casos.find(caso => caso.id == id)
 
         if(!target) {

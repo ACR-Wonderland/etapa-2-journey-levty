@@ -1,3 +1,7 @@
+//TO:DO Campos vazios
+
+
+
 function validateFields(requestBody, expectedFields) {
     // Illegal request body data type
     if(typeof requestBody != "object") return false
@@ -9,14 +13,7 @@ function validateFields(requestBody, expectedFields) {
 
         const regex = /^\d{4}-\d{2}-\d{2}$/;
         //Future date
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-based
-        const day = String(today.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-        if(date !== formattedDate) {
-            return false 
-        }
+       
 
 
         return regex.test(date);
