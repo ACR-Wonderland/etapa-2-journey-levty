@@ -4,23 +4,36 @@ const casos = []
 module.exports = {
     findAll: () => casos,
 
-    findById:  (id) => {
-
+    findById:   async  (id)  => {
         const target =  casos.find(caso => caso.id == id)
+
         if(!target) {
 
             return null
         }
+
+        
         return target
 
     },
+    filterByQuery: (query) => {
+        return casos.filter(caso => {
+          return Object.entries(query).every(([key, value]) => {
+            if (!caso.hasOwnProperty(key)) return false
+      
+            const casoValue = String(caso[key]).toLowerCase()
+            const queryValue = String(value).toLowerCase()
+      
+            return casoValue.includes(queryValue)
+          });
+        });
+      },
     append: (caso) =>{
          const id = crypto.randomUUID()
          const newCaso = {
             id: id,
             ...caso,
          }
-         console.log(newCaso)
          casos.push(newCaso)
          return newCaso
         

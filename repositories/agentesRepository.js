@@ -14,6 +14,22 @@ module.exports = {
         return target
 
     },
+
+
+     filterByQuery: (query) => {
+        return agentes.filter(agente => {
+          return Object.entries(query).every(([key, value]) => {
+            if (!agente.hasOwnProperty(key)) return false
+      
+            const agenteValue = String(agente[key]).toLowerCase()
+            const queryValue = String(value).toLowerCase()
+      
+            return agenteValue.includes(queryValue)
+          });
+        });
+      },
+
+
     append: (agente) =>{
          const id = crypto.randomUUID()
          const newAgente = {
