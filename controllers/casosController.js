@@ -55,7 +55,7 @@ module.exports = {
             const keysArray = Object.keys(body)
             if(!errorHandlers.isSubset(keysArray,fields)) {
                 res.status(400)
-                return res.json({message: "Atributos inválidos"})
+                return res.json({message: "Campo(s) inválido(s)"})
             }
         //PUT
         } else {

@@ -45,13 +45,15 @@ module.exports = {
     update: (fields, id) => {
 
         const index = agentes.findIndex(agente => agente.id == id)
-        if(index == null || index == undefined) {
+        if(index == -1) {
+
             return null
         }
         agentes[index] = {
             ...agentes[index], 
             ...fields       
         };
+        
         return agentes[index];
      },
      remove: (id) => {

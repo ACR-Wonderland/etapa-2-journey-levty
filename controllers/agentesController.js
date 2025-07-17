@@ -49,13 +49,13 @@ module.exports = {
 
         const body = req.body
         const {id} = req.params
+        console.log(id)
 
         if(req.method == "PATCH") {
-
             const keysArray = Object.keys(body)
             if(!errorHandlers.isSubset(keysArray,fields)) {
                 res.status(400)
-                return res.json({message: "Atributos inválidos"})
+                return res.json({message: "Campo(s) inválido(s)"})
             }
         //PUT
         } else {
