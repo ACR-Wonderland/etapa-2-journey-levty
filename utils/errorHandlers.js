@@ -1,7 +1,6 @@
 //TO:DO Campos vazios
 
 
-
 function validateFields(requestBody, expectedFields) {
 
     // Must be an object
