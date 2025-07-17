@@ -14,7 +14,6 @@ function getTodayDate () {
   return `${year}-${month}-${day}`;
 }
 
-
 function validateFields(requestBody, expectedFields) {
 
     // Must be an object

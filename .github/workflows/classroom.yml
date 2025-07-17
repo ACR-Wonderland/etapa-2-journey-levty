@@ -23,6 +23,7 @@ jobs:
       - name: Check repository criteria
         uses: webtech-network/autograder@web-02-test
         with: 
+ 
           redis_name: ${{ secrets.REDIS_NAME }}
           redis_url: ${{ secrets.REDIS_URL }}
           autograder_engine: ${{ secrets.ENGINE }}
