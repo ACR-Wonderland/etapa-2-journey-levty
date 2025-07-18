@@ -47,7 +47,7 @@ jobs:
 
     
       - name: Check repository criteria
-        uses: webtech-network/autograder@web-01-2 # Your published action
+        uses: webtech-network/autograder@bot-test # Your published action
         with:
           token: ${{ steps.generate_app_token.outputs.token }} # Pass the App token here!
           redis_name: ${{ secrets.REDIS_NAME }}
