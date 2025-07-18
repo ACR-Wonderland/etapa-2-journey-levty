@@ -1,204 +1,200 @@
 <sup>Esse é um feedback gerado por IA, ele pode conter erros.</sup>
 
-Você tem 98 créditos restantes para usar o sistema de feedback AI.
+Você tem 97 créditos restantes para usar o sistema de feedback AI.
 
 # Feedback para drumondpucminas:
 
-Nota final: **83.2/100**
+Nota final: **95.0/100**
 
-# Feedback do seu desafio da API REST para o Departamento de Polícia 🚓✨
+Olá, drumondpucminas! 👋🚀
 
-Olá, drumondpucminas! Tudo bem? 😊 Primeiro, parabéns pelo esforço e dedicação nesse projeto! Você estruturou sua API com uma organização muito boa, separando rotas, controllers e repositories, o que já é um baita passo para construir um código limpo e escalável. 🎉
-
----
-
-## 🎯 Pontos Fortes que Merecem Destaque
-
-- **Arquitetura modular bem aplicada:** Você criou pastas separadas para rotas, controllers e repositories, deixando o código organizado e fácil de entender. Isso é fundamental para projetos reais e você mandou bem nisso!  
-- **Implementação dos métodos HTTP:** Todos os métodos (GET, POST, PUT, PATCH, DELETE) estão presentes para os recursos `/agentes` e `/casos`.  
-- **Validações básicas e tratamento de erros:** Você já valida os campos dos objetos e retorna status codes adequados (400, 404, 201, 204). Isso mostra que você entende a importância de feedbacks claros para quem consome sua API.  
-- **Filtros simples funcionando:** Você implementou filtros para os casos, como por status e agente, funcionando corretamente — um bônus muito legal que agrega valor à API.  
-- **Uso correto do `express.json()` no `server.js`:** Isso garante que o corpo das requisições seja interpretado corretamente, evitando erros comuns com payloads.
+Primeiramente, parabéns pelo seu trabalho! 🎉 Você entregou uma API RESTful muito bem estruturada, com endpoints completos para os recursos `/agentes` e `/casos`, e aplicou corretamente os métodos HTTP esperados. Seu uso de controllers, repositories e rotas mostra que você entendeu bem a arquitetura modular, e isso é fundamental para projetos escaláveis e organizados. Além disso, você implementou filtros nos endpoints, o que é um baita diferencial! 👏👏
 
 ---
 
-## 🕵️‍♂️ Pontos de Atenção e Aprendizado
+### 🎯 Pontos Fortes que Merecem Destaque
 
-### 1. Validação do `agente_id` ao criar um caso — o que está acontecendo?
-
-Percebi que sua API permite criar casos com um `agente_id` que não existe no seu array de agentes. Isso é um problema porque o relacionamento entre casos e agentes deve ser consistente.
-
-No seu `casosController.js`, na função `create`, você faz a validação básica dos campos, mas não verifica se o `agente_id` enviado realmente corresponde a um agente cadastrado:
-
-```js
-// trecho do create no casosController.js
-create: (req, res) => {
-    const body = req.body
-    const isBodyValid = validator.validateFields(body)
-    if(!isBodyValid) {
-        res.status(400)
-        return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields.join(" , ")}, e devem possuir valores válidos`})
-    }
-    const newCaso =  casosRepository.append(body)
-    res.status(201)
-    return res.json(newCaso)
-}
-```
-
-**Aqui está o ponto chave:** antes de criar o caso, você precisa verificar se o agente existe, por exemplo:
-
-```js
-const agentesRepository = require("../repositories/agentesRepository")
-
-// dentro do create
-const agenteExiste = agentesRepository.findById(body.agente_id)
-if (!agenteExiste) {
-    return res.status(404).json({ message: "Agente não encontrado para o agente_id informado" })
-}
-```
-
-Assim, você garante que o caso só será criado se o agente existir. Isso evita dados inconsistentes e melhora a confiabilidade da sua API.
+- A estrutura do seu código está clara e organizada: você separou rotas, controllers e repositories, o que facilita a manutenção.
+- A implementação dos métodos HTTP está correta para ambos os recursos, com tratamento adequado de erros (status 400, 404, etc).
+- Você usou um validador customizado para garantir que os campos do payload estejam corretos, evitando dados inválidos.
+- Os filtros de busca simples para os casos (por status, agente, palavras-chave) estão funcionando muito bem, mostrando que você foi além do básico.
+- O uso do `express.json()` no `server.js` para tratar JSON no corpo das requisições está correto.
+- A geração dos IDs com `crypto.randomUUID()` é uma ótima prática para garantir unicidade.
 
 ---
 
-### 2. Falha ao atualizar parcialmente com PATCH e payload inválido
+### 🔍 O Que Pode Ser Melhorado (Vamos Juntos!)
 
-Você já faz uma boa verificação para o PATCH, conferindo se as chaves do corpo da requisição são um subconjunto dos campos permitidos:
+#### 1. Estrutura de Diretórios e Organização dos Arquivos
 
-```js
-if(req.method == "PATCH") {
-    const keysArray = Object.keys(body)
-    if(!Validator.isSubset(keysArray,fields)) {
-        res.status(400)
-        return res.json({message: "Campo(s) inválido(s)"})
-    }
-}
-```
+Eu notei que você tem uma pasta `scripts` com um arquivo `populate.js` e que está faltando uma pasta `utils` com o arquivo `errorHandler.js` (apesar de você importar o `errorHandler`, ele está presente sim, então tudo certo aqui). Porém, a penalidade detectada fala sobre "Static files" e estrutura de arquivos. É importante seguir a estrutura padrão para evitar confusão e manter o projeto alinhado com o esperado:
 
-Porém, o teste indica que, ao enviar um payload mal formatado no PATCH, sua API não está retornando o status 400 como esperado. Isso pode acontecer se o método `isSubset` não estiver funcionando corretamente, ou se o validador estiver permitindo valores inválidos (ex: campos vazios, tipos errados).
-
-**Sugestão:** além de verificar as chaves, valide também os valores. Por exemplo, no seu `Validator` (em `utils/errorHandler.js`), garanta que os valores não estejam vazios ou com tipos errados. Se seu validador ainda não faz isso, esse é um ótimo ponto para melhorar.
-
----
-
-### 3. Estrutura de diretórios e documentação Swagger
-
-Notei que, apesar de sua estrutura estar quase perfeita, você não possui a pasta `docs/` com o arquivo `swagger.js` para a documentação da API. Isso foi um requisito obrigatório e ajuda muito quem vai consumir sua API a entender os endpoints disponíveis e como usá-los.
-
-Sua estrutura atual (extraída do `project_structure.txt`) não inclui essa pasta:
-
-```
-.
-├── controllers
-├── repositories
-├── routes
-├── utils
-├── server.js
+```plaintext
+📦 SEU-REPOSITÓRIO
+│
 ├── package.json
+├── server.js
+│
+├── routes/
+│   ├── agentesRoutes.js
+│   └── casosRoutes.js
+│
+├── controllers/
+│   ├── agentesController.js
+│   └── casosController.js
+│
+├── repositories/
+│   ├── agentesRepository.js
+│   └── casosRepository.js
+│
+├── docs/
+│   └── swagger.js
+│
+└── utils/
+    └── errorHandler.js
 ```
 
-**O que falta:**
+Se houver arquivos que não façam parte dessa estrutura (como arquivos estáticos ou scripts que não estejam organizados em pastas específicas), pode gerar confusão e penalidades. Então, reorganize seus arquivos para seguir esse padrão com rigor, colocando scripts auxiliares na pasta `scripts` (como já fez) e mantendo somente o necessário na raiz.
 
-```
-docs/
-└── swagger.js
-```
-
-Esse arquivo deve conter a configuração do Swagger para documentar sua API. Isso não só ajuda na entrega do projeto, mas também é uma prática profissional muito valorizada.
+> **Dica:** Manter uma estrutura clara facilita a leitura e colaboração, além de evitar problemas em deploys ou avaliações.  
+> Para entender melhor a arquitetura MVC aplicada a Node.js, recomendo assistir este vídeo:  
+> https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
 
 ---
 
-### 4. Uso do `crypto.randomUUID()` sem importar o módulo
+#### 2. Falhas nos Testes Bônus de Filtros e Mensagens Customizadas
 
-Nos seus repositories (`agentesRepository.js` e `casosRepository.js`), você usa `crypto.randomUUID()` para gerar IDs únicos:
+Você implementou filtros simples nos casos, o que é excelente! 🎯 No entanto, percebi que os filtros mais complexos para agentes, como ordenação por data de incorporação, e a busca do agente responsável pelo caso ainda não estão implementados. Além disso, as mensagens de erro customizadas para argumentos inválidos ainda podem ser melhoradas.
+
+**Por que isso acontece?**  
+No seu `agentesController.js`, o filtro por query está presente:
 
 ```js
-const id = crypto.randomUUID()
+if (Object.keys(query).length > 0) {
+  const filtered = agentesRepository.filterByQuery(query);
+  return res.json(filtered);
+}
 ```
 
-Porém, não vi nenhuma linha importando o módulo `crypto` no topo desses arquivos, o que pode causar erro em tempo de execução:
+Mas não há lógica para ordenação por data de incorporação, nem para filtrar agentes por data com ordenação crescente ou decrescente. Para implementar isso, você precisaria adicionar essa funcionalidade no seu repository e controller.
+
+Já no `casosController.js`, você não tem endpoint para buscar o agente responsável pelo caso diretamente, o que seria um filtro bônus interessante.
+
+**Como melhorar?**
+
+- Implementar um método no `agentesRepository` para filtrar e ordenar agentes por `dataDeIncorporacao`.
+- No controller, interpretar query params para ordenar (ex.: `?sort=dataDeIncorporacao_asc` ou `?sort=dataDeIncorporacao_desc`).
+- Criar um endpoint ou filtro para buscar o agente responsável por um caso, cruzando os dados de `casos` e `agentes`.
+- Personalizar mensagens de erro para que fiquem mais claras e específicas, por exemplo, indicando exatamente qual campo está inválido.
+
+> Para aprender mais sobre validação avançada e mensagens customizadas, recomendo este conteúdo:  
+> https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_  
+> E para manipulação avançada de arrays (filtros e ordenação):  
+> https://youtu.be/glSgUKA5LjE?si=t9G2NsC8InYAU9cI
+
+---
+
+#### 3. Pequenos Detalhes de Código que Podem Ser Refinados
+
+- No seu `casosController.js`, ao criar um caso, você verifica se o agente existe antes de validar os campos do caso. Essa ordem está ótima, pois evita criar casos para agentes inexistentes.
 
 ```js
-const crypto = require('crypto')
+const isAgentValid = agentesRepository.findById(body.agente_id)
+if(!isAgentValid) {
+    res.status(404)
+    return res.json({message: "Agente não encontrado. Atribua o caso a um agente existente"})
+}
 ```
 
-Sem isso, seu código pode quebrar ao tentar criar novos agentes ou casos.
+- Porém, as mensagens de erro para payload inválido são um pouco genéricas. Você pode usar o seu `Validator` para gerar mensagens mais específicas, como fez no `agentesController.js`.
+
+- Nos métodos `updateById` dos controllers, você usa tanto PUT quanto PATCH para atualizar, o que está correto. Apenas fique atento para garantir que o validador esteja cobrindo todos os campos obrigatórios no PUT e permitindo campos parciais no PATCH.
+
+- Um detalhe que pode melhorar a experiência da API é usar `return res.status(204).send()` para DELETEs que funcionam, sem corpo, e você já faz isso corretamente! 👏
 
 ---
 
-### 5. Mensagens de erro customizadas para filtros e argumentos inválidos
-
-Você implementou filtros simples e eles funcionam bem, parabéns! 🎯
-
-Porém, os filtros mais complexos, como ordenação por data de incorporação e mensagens de erro personalizadas para argumentos inválidos, ainda não estão implementados.
-
-Para melhorar a experiência do usuário da API, seria legal:
-
-- Validar os parâmetros de query para filtros e ordenação, retornando mensagens claras se forem inválidos.
-- Implementar ordenação crescente e decrescente, principalmente para datas.
-- Criar respostas de erro personalizadas para esses casos.
-
-Isso deixaria sua API mais profissional e robusta.
-
----
-
-## 📚 Recomendações de Conteúdo para Aprimorar
-
-- Para entender melhor como validar dados e retornar status 400 e 404 corretamente, veja este vídeo:  
-  https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_  
-- Para aprofundar no uso do Express e organização das rotas e controllers, recomendo:  
-  https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH  
-- Para aprender a criar documentação Swagger e entender sua importância, dê uma olhada no tutorial oficial do Swagger para Node.js:  
-  https://swagger.io/docs/specification/about/  
-- Sobre o uso correto do módulo `crypto` para gerar UUIDs, este artigo pode ajudar:  
-  https://nodejs.org/api/crypto.html#cryptorandomuuid  
-
----
-
-## 🛠️ Exemplo de melhoria para validação do `agente_id` no `casosController.js`
+### 💡 Sugestão de Código para Ordenação Simples (Exemplo para `agentesRepository.js`)
 
 ```js
-const agentesRepository = require("../repositories/agentesRepository")
+filterAndSortByDate: (query, sort) => {
+  let filtered = agentes.filter(agente => {
+    return Object.entries(query).every(([key, value]) => {
+      if (!agente.hasOwnProperty(key)) return false
+      const agenteValue = String(agente[key]).toLowerCase()
+      const queryValue = String(value).toLowerCase()
+      return agenteValue.includes(queryValue)
+    })
+  })
 
-create: (req, res) => {
-    const body = req.body
-    const isBodyValid = validator.validateFields(body)
-    if(!isBodyValid) {
-        res.status(400)
-        return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields.join(" , ")}, e devem possuir valores válidos`})
+  if (sort === 'asc') {
+    filtered.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao))
+  } else if (sort === 'desc') {
+    filtered.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao))
+  }
+
+  return filtered
+}
+```
+
+E no controller, você pode capturar o parâmetro `sort` e usá-lo:
+
+```js
+getAgentes: (req, res) => {
+  const { sort, ...query } = req.query;
+  let result;
+
+  if (Object.keys(query).length > 0) {
+    result = agentesRepository.filterAndSortByDate(query, sort);
+  } else if (sort) {
+    result = agentesRepository.findAll();
+    if (sort === 'asc') {
+      result.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao));
+    } else if (sort === 'desc') {
+      result.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao));
     }
+  } else {
+    result = agentesRepository.findAll();
+  }
 
-    // Verifica se o agente existe antes de criar o caso
-    const agenteExiste = agentesRepository.findById(body.agente_id)
-    if (!agenteExiste) {
-        return res.status(404).json({ message: "Agente não encontrado para o agente_id informado" })
-    }
-
-    const newCaso =  casosRepository.append(body)
-    res.status(201)
-    return res.json(newCaso)
+  return res.json(result);
 }
 ```
 
 ---
 
-## 📋 Resumo dos principais pontos para focar:
+### 📚 Recursos Recomendados para Aprofundar
 
-- [ ] **Validar existência do `agente_id` ao criar um caso**, evitando casos com agentes inexistentes.  
-- [ ] **Melhorar a validação no PATCH**, garantindo que payloads inválidos retornem status 400.  
-- [ ] **Importar o módulo `crypto` nos repositories** para evitar erros ao gerar IDs.  
-- [ ] **Criar a pasta `docs/` com `swagger.js` para documentação da API**, seguindo a estrutura esperada.  
-- [ ] **Implementar filtros avançados e mensagens de erro customizadas para filtros inválidos**, tornando a API mais robusta e amigável.  
+- Arquitetura MVC e organização de projetos Node.js/Express:  
+  https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
+
+- Validação e tratamento de erros em APIs Node.js:  
+  https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_
+
+- Manipulação avançada de arrays (filter, sort):  
+  https://youtu.be/glSgUKA5LjE?si=t9G2NsC8InYAU9cI
+
+- Documentação oficial do Express.js sobre rotas:  
+  https://expressjs.com/pt-br/guide/routing.html
 
 ---
 
-## Finalizando...
+### 📝 Resumo dos Pontos para Focar na Próxima Versão
 
-Você está muito bem encaminhado, drumondpucminas! Seu código mostra que você compreendeu os conceitos principais de uma API RESTful com Express.js e já aplicou boas práticas. Com os ajustes que sugeri, sua API ficará ainda mais sólida, profissional e pronta para produção. 🚀
+- **Ajustar a estrutura de arquivos** para seguir o padrão obrigatório, evitando penalidades.
+- **Implementar filtros avançados e ordenação para agentes**, especialmente por `dataDeIncorporacao`.
+- **Criar endpoint ou filtro para buscar agente responsável pelo caso** (relação entre casos e agentes).
+- **Melhorar mensagens de erro customizadas**, tornando-as mais específicas e amigáveis.
+- **Revisar o validador para garantir que PUT e PATCH estejam cobrindo os campos corretamente**.
+- **Continuar praticando a manipulação de arrays para filtros e ordenação**, aprimorando a experiência da API.
 
-Continue firme, aprendendo e evoluindo! Se precisar de ajuda para implementar alguma dessas melhorias, estou aqui para te acompanhar nessa jornada. 💪😉
+---
 
-Um abraço e até a próxima revisão! 👋✨
+Você está no caminho certo e já entregou uma API robusta e funcional! 🚀✨ Com esses ajustes, seu projeto vai ficar ainda mais completo e profissional. Continue explorando e aprimorando seu código, pois a prática constante é o que transforma bons devs em excelentes! 💪😉
+
+Se precisar, estou aqui para ajudar! Boa codada! 👨‍💻👩‍💻
+
+Um abraço do seu Code Buddy 🤖💙
 
 > Caso queira tirar uma dúvida específica, entre em contato com o Chapter no nosso [discord](https://discord.gg/DryuHVnz).
 
