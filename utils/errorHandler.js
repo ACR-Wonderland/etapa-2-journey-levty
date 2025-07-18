@@ -30,7 +30,6 @@ class Validator {
       const day = today.getDate().toString().padStart(2, '0')
       return `${year}-${month}-${day}`
     }
-  
     validateFields(requestBody) {
       if (typeof requestBody !== "object" || requestBody === null){ 
         this.errorMessage = "Corpo da Requisição deve ser um objeto"
