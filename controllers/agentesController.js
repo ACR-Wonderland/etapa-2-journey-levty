@@ -1,5 +1,5 @@
 const agentesRepository = require("../repositories/agentesRepository")
-const Validator = require("../utils/errorHandlers")
+const Validator = require("../utils/errorHandler")
 const fields = ["nome", "dataDeIncorporacao", "cargo"]
 const validator = new Validator(fields)
 module.exports = {

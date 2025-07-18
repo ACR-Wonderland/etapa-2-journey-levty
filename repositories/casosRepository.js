@@ -42,7 +42,7 @@ module.exports = {
     update: (fields, id) => {
 
         const index = casos.findIndex(caso => caso.id == id)
-        if(index == null || index == undefined) {
+        if(index == -1) {
             return null
         }
         casos[index] = {

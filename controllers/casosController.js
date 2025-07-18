@@ -1,7 +1,5 @@
 const casosRepository = require("../repositories/casosRepository")
-const Validator = require("../utils/errorHandlers")
-const errorHandlers = require("../utils/errorHandlers")
-
+const Validator = require("../utils/errorHandler")
 const fields = ["titulo", "descricao", "status", "agente_id"]
 const validator = new Validator(fields)
 
