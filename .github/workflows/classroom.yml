@@ -3,27 +3,55 @@ name: Autograder
 on:
   push:
     branches:
-      - main
+      - main # Or your main branch
   pull_request:
     branches:
-      - main
+      - main # Or your main branch
   workflow_dispatch:
 
 jobs:
   grading:
-    permissions: write-all
+    
+    permissions:
+      contents: write
+      checks: write
+     
+
     runs-on: ubuntu-latest
+    
     if: github.actor != 'github-classroom[bot]'
+
     steps:
+     
+      - name: Generate AUTOGRADER-BOT App Token
+        id: generate_app_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.AUTOGRADER_APP_ID }}
+          private_key: ${{ secrets.AUTOGRADER_APP_PRIVATE_KEY }}
+          repository: ${{ github.repository }} # Scopes the token to the current repository
+
+   
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-           path: submission
+          path: submission
+          token: ${{ steps.generate_app_token.outputs.token }} # Use the App's token for checkout
 
+      
+      - name: Configure Git for AUTOGRADER-BOT
+        run: |
+          git config --global user.name "AUTOGRADER-BOT"
+          git config --global user.email "AUTOGRADER-BOT[bot]@users.noreply.github.com"
+          # Or a specific email associated with your bot, if you've configured one.
+
+    
       - name: Check repository criteria
-        uses: webtech-network/autograder@web-01-2
-        with: 
- 
+        uses: webtech-network/autograder@web-01-2 # Your published action
+        with:
+          token: ${{ steps.generate_app_token.outputs.token }} # Pass the App token here!
           redis_name: ${{ secrets.REDIS_NAME }}
           redis_url: ${{ secrets.REDIS_URL }}
           autograder_engine: ${{ secrets.ENGINE }}
+
+     
