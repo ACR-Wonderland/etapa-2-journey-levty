@@ -19,7 +19,7 @@ jobs:
 
     runs-on: ubuntu-latest
     
-    if: github.actor != 'github-classroom[bot]'
+    if: github.actor != 'WebTech-Journey-Autograder[bot]'
 
     steps:
      
