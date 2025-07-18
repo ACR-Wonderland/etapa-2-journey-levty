@@ -10,5 +10,4 @@ router.patch("/casos/:id", casosController.updateById)
 router.delete("/casos/:id", casosController.deleteById)
 
 
-
 module.exports = router
