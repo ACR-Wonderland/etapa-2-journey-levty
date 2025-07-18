@@ -1,8 +1,7 @@
 const agentesRepository = require("../repositories/agentesRepository")
-const errorHandlers = require("../utils/errorHandlers")
-
+const Validator = require("../utils/errorHandlers")
 const fields = ["nome", "dataDeIncorporacao", "cargo"]
-
+const validator = new Validator(fields)
 module.exports = {
 
     //GET /agentes
@@ -34,11 +33,11 @@ module.exports = {
     //POST /agentes
     create: (req, res) => {
          const body = req.body
-         const isBodyValid = errorHandlers.validateFields(body,fields)
+         const isBodyValid = validator.validateFields(body)
          if(!isBodyValid) {
             
             res.status(400)
-            return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+            return res.json({message: validator.errorMessage})
 
          }
          const newAgente =  agentesRepository.append(body)
@@ -49,21 +48,20 @@ module.exports = {
 
         const body = req.body
         const {id} = req.params
-        console.log(id)
 
         if(req.method == "PATCH") {
             const keysArray = Object.keys(body)
-            if(!errorHandlers.isSubset(keysArray,fields)) {
+            if(!Validator.isSubset(keysArray,fields)) {
                 res.status(400)
                 return res.json({message: "Campo(s) inválido(s)"})
             }
         //PUT
         } else {
 
-            const isBodyValid = errorHandlers.validateFields(body, fields)
+            const isBodyValid = validator.validateFields(body)
             if(!isBodyValid) {
                 res.status(400)
-                res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+                return  res.json({message: validator.errorMessage})
             }
 
         }
@@ -72,9 +70,11 @@ module.exports = {
         if(!updatedAgente ) {
             res.status(404)
             return res.json({message: "Agente não encontrado"})
+        } else {
+            res.status(200)
+            return res.json(updatedAgente)
         }
-        res.status(200)
-        return res.json(updatedAgente)
+        
 
 
     },

@@ -1,7 +1,9 @@
 const casosRepository = require("../repositories/casosRepository")
+const Validator = require("../utils/errorHandlers")
 const errorHandlers = require("../utils/errorHandlers")
 
 const fields = ["titulo", "descricao", "status", "agente_id"]
+const validator = new Validator(fields)
 
 module.exports = {
 
@@ -35,11 +37,11 @@ module.exports = {
     //POST /casos
     create: (req, res) => {
         const body = req.body
-        const isBodyValid = errorHandlers.validateFields(body,fields)
+        const isBodyValid = validator.validateFields(body)
         if(!isBodyValid) {
         
             res.status(400)
-            return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}, e devem possuir valores válidos`})
+            return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields.join(" , ")}, e devem possuir valores válidos`})
 
         }
         const newCaso =  casosRepository.append(body)
@@ -53,17 +55,17 @@ module.exports = {
         if(req.method == "PATCH") {
 
             const keysArray = Object.keys(body)
-            if(!errorHandlers.isSubset(keysArray,fields)) {
+            if(!Validator.isSubset(keysArray,fields)) {
                 res.status(400)
                 return res.json({message: "Campo(s) inválido(s)"})
             }
         //PUT
         } else {
 
-            const isBodyValid = errorHandlers.validateFields(body, fields)
+            const isBodyValid = validator.validateFields(body)
             if(!isBodyValid) {
                 res.status(400)
-               return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields}`})
+               return res.json({message: `O corpo da requisição deve conter os seguintes campos: ${fields.join(" , ")}`})
             }
 
         }
