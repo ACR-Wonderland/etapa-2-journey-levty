@@ -1,4 +1,6 @@
 const casosRepository = require("../repositories/casosRepository")
+const agentesRepository = require("../repositories/agentesRepository")
+
 const Validator = require("../utils/errorHandler")
 const fields = ["titulo", "descricao", "status", "agente_id"]
 const validator = new Validator(fields)
@@ -35,6 +37,11 @@ module.exports = {
     //POST /casos
     create: (req, res) => {
         const body = req.body
+        const isAgentValid = agentesRepository.findById(body.agente_id)
+        if(!isAgentValid) {
+            res.status(404)
+            return res.json({message: "Agente não encontrado. Atribua o caso a um agente existente"})
+        }
         const isBodyValid = validator.validateFields(body)
         if(!isBodyValid) {
         
