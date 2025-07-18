@@ -4,12 +4,7 @@ class Validator {
       this.errorMessage = ""
     }
     #isValueValid (property, body) {
-        if(property == "cargo") {
-            if (body.cargo !== "inspetor" && body.cargo !== "delegado") {
-                this.errorMessage = "Campo 'cargo' só pode possuir os valores: 'inspetor', 'delegado'"
-                return false
-            }
-        }else if (property == "status") {
+         if (property == "status") {
             if (body.status !== "aberto" && body.status !== "solucionado") {
                 this.errorMessage = "Campo 'status' só pode possuir os valores: 'aberto', 'solucionado'"
                 return false
