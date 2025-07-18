@@ -1,200 +1,164 @@
 <sup>Esse é um feedback gerado por IA, ele pode conter erros.</sup>
 
-Você tem 97 créditos restantes para usar o sistema de feedback AI.
+Você tem 96 créditos restantes para usar o sistema de feedback AI.
 
 # Feedback para drumondpucminas:
 
 Nota final: **95.0/100**
 
-Olá, drumondpucminas! 👋🚀
+Olá, drumondpucminas! 👋😊
 
-Primeiramente, parabéns pelo seu trabalho! 🎉 Você entregou uma API RESTful muito bem estruturada, com endpoints completos para os recursos `/agentes` e `/casos`, e aplicou corretamente os métodos HTTP esperados. Seu uso de controllers, repositories e rotas mostra que você entendeu bem a arquitetura modular, e isso é fundamental para projetos escaláveis e organizados. Além disso, você implementou filtros nos endpoints, o que é um baita diferencial! 👏👏
-
----
-
-### 🎯 Pontos Fortes que Merecem Destaque
-
-- A estrutura do seu código está clara e organizada: você separou rotas, controllers e repositories, o que facilita a manutenção.
-- A implementação dos métodos HTTP está correta para ambos os recursos, com tratamento adequado de erros (status 400, 404, etc).
-- Você usou um validador customizado para garantir que os campos do payload estejam corretos, evitando dados inválidos.
-- Os filtros de busca simples para os casos (por status, agente, palavras-chave) estão funcionando muito bem, mostrando que você foi além do básico.
-- O uso do `express.json()` no `server.js` para tratar JSON no corpo das requisições está correto.
-- A geração dos IDs com `crypto.randomUUID()` é uma ótima prática para garantir unicidade.
+Antes de tudo, parabéns pelo empenho e pela qualidade do seu código! 🎉 Você alcançou uma nota excelente (95/100), o que mostra que seu projeto está muito bem estruturado e funcionando na maior parte dos requisitos obrigatórios. Isso é incrível! 🚀
 
 ---
 
-### 🔍 O Que Pode Ser Melhorado (Vamos Juntos!)
+## 🎯 O que você mandou muito bem
 
-#### 1. Estrutura de Diretórios e Organização dos Arquivos
+- Seus endpoints para os recursos `/agentes` e `/casos` estão todos implementados, com os métodos HTTP corretos (GET, POST, PUT, PATCH, DELETE). Isso é fundamental e você fez direitinho!
+- A organização do código em **rotas**, **controladores** e **repositories** está clara e modular. Parabéns por seguir essa arquitetura que facilita muito a manutenção e o crescimento da aplicação.
+- Você implementou validações de dados e tratamento de erros com status codes apropriados (400, 404, etc), garantindo que a API responda corretamente em situações de erro.
+- Os filtros simples para os casos (filtros por status, agente, keywords) funcionam perfeitamente, o que é um ótimo bônus para a usabilidade da API.
+- O uso do `express.json()` para interpretar o corpo das requisições está correto e você está usando o `crypto.randomUUID()` para gerar IDs únicos, o que é uma ótima prática para dados em memória.
+- O uso do `Validator` para validar campos obrigatórios e a lógica de atualização parcial (PATCH) e completa (PUT) está bem implementada.
 
-Eu notei que você tem uma pasta `scripts` com um arquivo `populate.js` e que está faltando uma pasta `utils` com o arquivo `errorHandler.js` (apesar de você importar o `errorHandler`, ele está presente sim, então tudo certo aqui). Porém, a penalidade detectada fala sobre "Static files" e estrutura de arquivos. É importante seguir a estrutura padrão para evitar confusão e manter o projeto alinhado com o esperado:
+---
 
-```plaintext
-📦 SEU-REPOSITÓRIO
-│
+## 🔍 Pontos para você ficar de olho e melhorar
+
+### 1. Estrutura de diretórios — atenção à organização!
+
+Eu notei que você recebeu uma penalidade relacionada à estrutura dos arquivos estáticos, e olhando a estrutura que você enviou, percebi que está faltando a pasta `public` ou outra pasta para arquivos estáticos, que era uma exigência do projeto (mesmo que você não tenha arquivos estáticos, o projeto espera essa estrutura para futuros usos).
+
+**Por que isso importa?**  
+Manter a organização da estrutura conforme o esperado é essencial para que seu projeto seja escalável e para que outras pessoas (e você no futuro!) consigam navegar no código com facilidade.
+
+**O que fazer?**  
+Crie uma pasta chamada `public/` na raiz do projeto para arquivos estáticos, mesmo que vazia por enquanto, ou siga exatamente a estrutura que foi passada no enunciado do desafio:
+
+```
+.
 ├── package.json
 ├── server.js
-│
 ├── routes/
-│   ├── agentesRoutes.js
-│   └── casosRoutes.js
-│
 ├── controllers/
-│   ├── agentesController.js
-│   └── casosController.js
-│
 ├── repositories/
-│   ├── agentesRepository.js
-│   └── casosRepository.js
-│
 ├── docs/
-│   └── swagger.js
-│
 └── utils/
-    └── errorHandler.js
 ```
 
-Se houver arquivos que não façam parte dessa estrutura (como arquivos estáticos ou scripts que não estejam organizados em pastas específicas), pode gerar confusão e penalidades. Então, reorganize seus arquivos para seguir esse padrão com rigor, colocando scripts auxiliares na pasta `scripts` (como já fez) e mantendo somente o necessário na raiz.
-
-> **Dica:** Manter uma estrutura clara facilita a leitura e colaboração, além de evitar problemas em deploys ou avaliações.  
-> Para entender melhor a arquitetura MVC aplicada a Node.js, recomendo assistir este vídeo:  
-> https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
+Se houver arquivos estáticos, eles devem estar em `public/`. Se não houver, confirme se não foi solicitado explicitamente e evite criar arquivos fora dessa estrutura.
 
 ---
 
-#### 2. Falhas nos Testes Bônus de Filtros e Mensagens Customizadas
+### 2. Falha nos testes bônus relacionados a filtros complexos e mensagens de erro customizadas
 
-Você implementou filtros simples nos casos, o que é excelente! 🎯 No entanto, percebi que os filtros mais complexos para agentes, como ordenação por data de incorporação, e a busca do agente responsável pelo caso ainda não estão implementados. Além disso, as mensagens de erro customizadas para argumentos inválidos ainda podem ser melhoradas.
+Você implementou filtros simples para os casos e eles funcionam super bem, parabéns! 🎉  
+Porém, percebi que os filtros mais complexos para agentes — como filtragem por data de incorporação com ordenação crescente e decrescente — ainda não estão implementados.
+
+Além disso, os erros customizados para argumentos inválidos de agentes e casos também não foram contemplados, o que fez você perder alguns pontos no bônus.
 
 **Por que isso acontece?**  
-No seu `agentesController.js`, o filtro por query está presente:
-
-```js
-if (Object.keys(query).length > 0) {
-  const filtered = agentesRepository.filterByQuery(query);
-  return res.json(filtered);
-}
-```
-
-Mas não há lógica para ordenação por data de incorporação, nem para filtrar agentes por data com ordenação crescente ou decrescente. Para implementar isso, você precisaria adicionar essa funcionalidade no seu repository e controller.
-
-Já no `casosController.js`, você não tem endpoint para buscar o agente responsável pelo caso diretamente, o que seria um filtro bônus interessante.
-
-**Como melhorar?**
-
-- Implementar um método no `agentesRepository` para filtrar e ordenar agentes por `dataDeIncorporacao`.
-- No controller, interpretar query params para ordenar (ex.: `?sort=dataDeIncorporacao_asc` ou `?sort=dataDeIncorporacao_desc`).
-- Criar um endpoint ou filtro para buscar o agente responsável por um caso, cruzando os dados de `casos` e `agentes`.
-- Personalizar mensagens de erro para que fiquem mais claras e específicas, por exemplo, indicando exatamente qual campo está inválido.
-
-> Para aprender mais sobre validação avançada e mensagens customizadas, recomendo este conteúdo:  
-> https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_  
-> E para manipulação avançada de arrays (filtros e ordenação):  
-> https://youtu.be/glSgUKA5LjE?si=t9G2NsC8InYAU9cI
-
----
-
-#### 3. Pequenos Detalhes de Código que Podem Ser Refinados
-
-- No seu `casosController.js`, ao criar um caso, você verifica se o agente existe antes de validar os campos do caso. Essa ordem está ótima, pois evita criar casos para agentes inexistentes.
-
-```js
-const isAgentValid = agentesRepository.findById(body.agente_id)
-if(!isAgentValid) {
-    res.status(404)
-    return res.json({message: "Agente não encontrado. Atribua o caso a um agente existente"})
-}
-```
-
-- Porém, as mensagens de erro para payload inválido são um pouco genéricas. Você pode usar o seu `Validator` para gerar mensagens mais específicas, como fez no `agentesController.js`.
-
-- Nos métodos `updateById` dos controllers, você usa tanto PUT quanto PATCH para atualizar, o que está correto. Apenas fique atento para garantir que o validador esteja cobrindo todos os campos obrigatórios no PUT e permitindo campos parciais no PATCH.
-
-- Um detalhe que pode melhorar a experiência da API é usar `return res.status(204).send()` para DELETEs que funcionam, sem corpo, e você já faz isso corretamente! 👏
-
----
-
-### 💡 Sugestão de Código para Ordenação Simples (Exemplo para `agentesRepository.js`)
-
-```js
-filterAndSortByDate: (query, sort) => {
-  let filtered = agentes.filter(agente => {
-    return Object.entries(query).every(([key, value]) => {
-      if (!agente.hasOwnProperty(key)) return false
-      const agenteValue = String(agente[key]).toLowerCase()
-      const queryValue = String(value).toLowerCase()
-      return agenteValue.includes(queryValue)
-    })
-  })
-
-  if (sort === 'asc') {
-    filtered.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao))
-  } else if (sort === 'desc') {
-    filtered.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao))
-  }
-
-  return filtered
-}
-```
-
-E no controller, você pode capturar o parâmetro `sort` e usá-lo:
+No seu `agentesController.js`, o método `getAgentes` faz um filtro básico via `filterByQuery`, mas não há lógica para ordenação ou filtros mais avançados como datas:
 
 ```js
 getAgentes: (req, res) => {
-  const { sort, ...query } = req.query;
-  let result;
-
-  if (Object.keys(query).length > 0) {
-    result = agentesRepository.filterAndSortByDate(query, sort);
-  } else if (sort) {
-    result = agentesRepository.findAll();
-    if (sort === 'asc') {
-      result.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao));
-    } else if (sort === 'desc') {
-      result.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao));
+    const query = req.query;
+  
+    if (Object.keys(query).length > 0) {
+      const filtered = agentesRepository.filterByQuery(query);
+      return res.json(filtered);
     }
-  } else {
-    result = agentesRepository.findAll();
+  
+    const all = agentesRepository.findAll();
+    return res.json(all);
+  }
+```
+
+Aqui você filtra, mas não ordena nem trata filtros complexos. Para implementar, você pode adicionar algo assim:
+
+```js
+getAgentes: (req, res) => {
+  let agentes = agentesRepository.findAll();
+
+  // Filtro por dataDeIncorporacao (exemplo)
+  if (req.query.dataDeIncorporacao) {
+    agentes = agentes.filter(agente => agente.dataDeIncorporacao === req.query.dataDeIncorporacao);
   }
 
-  return res.json(result);
+  // Ordenação (exemplo)
+  if (req.query.sortBy === 'dataDeIncorporacao') {
+    agentes.sort((a, b) => {
+      if (req.query.order === 'desc') {
+        return new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao);
+      }
+      return new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao);
+    });
+  }
+
+  return res.json(agentes);
 }
 ```
 
+Quanto às mensagens de erro personalizadas, no seu código você usa mensagens padrão, como:
+
+```js
+res.status(400)
+return res.json({message: validator.errorMessage})
+```
+
+Para melhorar, você pode criar mensagens mais detalhadas e específicas para cada tipo de erro, ajudando o consumidor da API a entender exatamente o que deu errado.
+
 ---
 
-### 📚 Recursos Recomendados para Aprofundar
+### 3. Pequena sugestão para os status HTTP no DELETE
 
-- Arquitetura MVC e organização de projetos Node.js/Express:  
+No seu controller, a resposta para DELETE quando o recurso é removido está assim:
+
+```js
+if (wasRemoved) {
+    return res.status(204).send()
+} else {
+    res.status(404)
+    return res.json({ message: "Agente não encontrado" })
+}
+```
+
+Perfeito! Só uma observação: o método `.send()` sem parâmetros é o jeito correto para o status 204 (No Content), então está ótimo. Apenas certifique-se de que não está enviando corpo junto com 204, pois isso pode causar problemas.
+
+---
+
+## 📚 Recursos para você aprofundar e corrigir os pontos acima
+
+- Para entender melhor como organizar a estrutura do projeto e a arquitetura MVC:  
   https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
 
-- Validação e tratamento de erros em APIs Node.js:  
-  https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_
-
-- Manipulação avançada de arrays (filter, sort):  
+- Para aprender a implementar filtros e ordenação em arrays no JavaScript:  
   https://youtu.be/glSgUKA5LjE?si=t9G2NsC8InYAU9cI
 
-- Documentação oficial do Express.js sobre rotas:  
+- Para criar mensagens de erro customizadas e tratar status HTTP corretamente:  
+  https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/400  
+  https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/404
+
+- Para entender melhor o uso de middlewares e manipulação de requisições no Express.js:  
   https://expressjs.com/pt-br/guide/routing.html
 
 ---
 
-### 📝 Resumo dos Pontos para Focar na Próxima Versão
+## 📝 Resumo rápido para focar
 
-- **Ajustar a estrutura de arquivos** para seguir o padrão obrigatório, evitando penalidades.
-- **Implementar filtros avançados e ordenação para agentes**, especialmente por `dataDeIncorporacao`.
-- **Criar endpoint ou filtro para buscar agente responsável pelo caso** (relação entre casos e agentes).
-- **Melhorar mensagens de erro customizadas**, tornando-as mais específicas e amigáveis.
-- **Revisar o validador para garantir que PUT e PATCH estejam cobrindo os campos corretamente**.
-- **Continuar praticando a manipulação de arrays para filtros e ordenação**, aprimorando a experiência da API.
+- 📂 Ajuste a estrutura do projeto para seguir o padrão esperado, principalmente com relação a arquivos estáticos (pasta `public`).
+- 🔍 Implemente filtros mais complexos e ordenação para o endpoint `/agentes`, especialmente para a data de incorporação.
+- 💬 Crie mensagens de erro mais personalizadas para os casos de dados inválidos, para deixar a API mais amigável.
+- ✅ Continue usando as boas práticas já implementadas: validação, tratamento de erros e organização modular.
+- 📚 Estude os recursos indicados para aprimorar esses pontos e elevar ainda mais a qualidade do seu projeto!
 
 ---
 
-Você está no caminho certo e já entregou uma API robusta e funcional! 🚀✨ Com esses ajustes, seu projeto vai ficar ainda mais completo e profissional. Continue explorando e aprimorando seu código, pois a prática constante é o que transforma bons devs em excelentes! 💪😉
+drumondpucminas, você está no caminho certo e seu código está muito bom! 🚀 Continue focando em detalhes que fazem a diferença, como filtros avançados e mensagens claras para o usuário da API. Isso vai te levar longe! 👏
 
-Se precisar, estou aqui para ajudar! Boa codada! 👨‍💻👩‍💻
+Se precisar, estarei aqui para te ajudar a destravar qualquer parte que ficar difícil. Vamos juntos nessa jornada! 💪✨
 
-Um abraço do seu Code Buddy 🤖💙
+Um abraço e até a próxima revisão! 🤖💙
 
 > Caso queira tirar uma dúvida específica, entre em contato com o Chapter no nosso [discord](https://discord.gg/DryuHVnz).
 
