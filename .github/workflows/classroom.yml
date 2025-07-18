@@ -21,7 +21,7 @@ jobs:
            path: submission
 
       - name: Check repository criteria
-        uses: webtech-network/autograder@web-02-test
+        uses: webtech-network/autograder@web-01-2
         with: 
  
           redis_name: ${{ secrets.REDIS_NAME }}
