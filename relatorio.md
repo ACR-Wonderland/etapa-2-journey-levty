@@ -1,175 +1,203 @@
 <sup>Esse é um feedback gerado por IA, ele pode conter erros.</sup>
 
-Você tem 86 créditos restantes para usar o sistema de feedback AI.
+Você tem 85 créditos restantes para usar o sistema de feedback AI.
 
 # Feedback para ArthurCRodrigues:
 
 Nota final: **100.0/100**
 
-# Feedback para ArthurCRodrigues 🚓👮‍♂️
+Olá, ArthurCRodrigues! 👋✨
 
-Olá, Arthur! Que prazer revisar seu código para essa API do Departamento de Polícia! 🚀 Primeiro, quero parabenizá-lo pela entrega impecável da parte principal do projeto — você implementou TODOS os métodos HTTP para os recursos `/agentes` e `/casos` com uma organização muito clara e consistente. 🎉 Isso é fundamental para construir APIs robustas e escaláveis!
+Primeiramente, parabéns pelo trabalho incrível que você entregou! 🎉 Sua API está muito bem estruturada, organizada e funcional. Você implementou todos os endpoints obrigatórios para os recursos `/agentes` e `/casos`, cuidou das validações, tratamento de erros e retornou os status HTTP corretos em cada situação. Isso é fundamental para uma API RESTful robusta, e você mandou muito bem! 👏
+
+Além disso, notei que você foi além do básico e conseguiu implementar filtros simples para os casos, como buscar por status, agente responsável e palavras-chave no título/descrição. Isso mostra que você está pensando em oferecer funcionalidades que realmente facilitam a vida do usuário da API — super bônus! 🚀
 
 ---
 
-## 🎯 Pontos Fortes que Merecem Destaque
+### Vamos destrinchar seu código e entender juntos alguns pontos que podem ser aprimorados para você ir ainda mais longe! 🔍
 
-- **Arquitetura modular e limpa:** Você separou muito bem as responsabilidades em `routes`, `controllers` e `repositories`. Isso facilita a manutenção e o entendimento do código.
+---
+
+## 1. Estrutura do Projeto — Está Perfeita! 🗂️
+
+Sua organização de pastas e arquivos está exatamente como esperávamos:
+
+```
+server.js
+routes/
+controllers/
+repositories/
+utils/
+docs/
+package.json
+```
+
+Isso facilita muito a manutenção e escalabilidade do projeto. Parabéns por seguir essa arquitetura modular e clara! 👍
+
+---
+
+## 2. Endpoints e Lógica — Tudo Implementado e Funcionando! 🎯
+
+Você implementou todos os métodos HTTP para `/agentes` e `/casos`:
+
+- GET, POST, PUT, PATCH, DELETE para ambos os recursos.
+- Validações de campos obrigatórios e tipos.
+- Tratamento correto de erros com status 400 e 404.
+- Retorno dos status HTTP corretos: 200, 201 e 204.
+- Filtros simples para consultas.
+
+Seu uso do `express.Router()` para separar as rotas está ótimo, e os controllers estão bem organizados, delegando responsabilidades para os repositories que manipulam os dados em memória.
+
+---
+
+## 3. Sobre os Testes Bônus que Não Passaram — Vamos Entender Juntos! 🤔
+
+Percebi que alguns testes bônus falharam, principalmente relacionados a:
+
+- Implementar endpoint para buscar o agente responsável por um caso.
+- Filtragem e ordenação complexa dos agentes por data de incorporação.
+- Mensagens de erro customizadas para argumentos inválidos.
+
+### Por que isso aconteceu?
+
+Ao analisar seu código, vejo que você implementou filtros simples para casos, mas não há um endpoint específico para buscar o agente responsável a partir do caso, nem uma ordenação complexa dos agentes por data de incorporação.
+
+Por exemplo, no seu `casosController.js`, você tem:
+
+```js
+getCasos: (req, res) => {
+    const query = req.query;
   
-- **Validação e tratamento de erros:** A forma como você criou a classe `Validator` e a usou para validar os campos obrigatórios mostra que você entendeu bem a importância de garantir dados consistentes e de responder com os status HTTP corretos (400, 404, etc). Muito bom!
-
-- **Implementação completa dos endpoints:** Todos os métodos GET, POST, PUT, PATCH e DELETE estão implementados para os dois recursos, com respostas apropriadas em cada caso.
-
-- **Filtros nos endpoints de listagem:** Você implementou filtros simples para os casos, permitindo buscas por status, agente e keywords no título/descrição. Isso é um diferencial muito legal!
-
----
-
-## 🔍 Oportunidades de Melhoria e Aprendizado
-
-### 1. Filtros e Ordenação Avançada para Agentes
-
-Percebi que os testes bônus de filtragem e ordenação complexa para agentes não passaram. Isso indica que, embora seu endpoint `/agentes` aceite filtros simples via query params, ele ainda não implementa a ordenação por data de incorporação, por exemplo.
-
-Para melhorar, você pode:
-
-- **Adicionar suporte para ordenação crescente e decrescente** no método `getAgentes` do controlador, algo como:
-
-```js
-getAgentes: (req, res) => {
-    const { sortBy, order, ...filters } = req.query;
-
-    let agentesFiltrados = agentesRepository.filterByQuery(filters);
-
-    if (sortBy === "dataDeIncorporacao") {
-        agentesFiltrados.sort((a, b) => {
-            const dateA = new Date(a.dataDeIncorporacao);
-            const dateB = new Date(b.dataDeIncorporacao);
-            return order === "desc" ? dateB - dateA : dateA - dateB;
-        });
+    if (Object.keys(query).length > 0) {
+      const filtered = casosRepository.filterByQuery(query);
+      return res.json(filtered);
     }
-
-    return res.json(agentesFiltrados);
-}
+  
+    const all = casosRepository.findAll();
+    return res.json(all);
+  },
 ```
 
-Assim, você permite que o usuário faça requisições como `/agentes?sortBy=dataDeIncorporacao&order=asc`.
+Isso é ótimo para filtros simples, mas não contempla buscas que envolvam relacionamento entre agentes e casos, nem ordenações específicas.
 
-- **Recomendo assistir este vídeo** para entender melhor como estruturar filtros e ordenações em APIs REST:  
-👉 https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
+**Para implementar o filtro de agente responsável por caso, você precisaria de algo como um endpoint que, dado um caso, retorna o agente vinculado, ou um filtro que permita listar agentes filtrados por data de incorporação com ordenação crescente e decrescente.**
+
+Além disso, as mensagens de erro personalizadas para argumentos inválidos não estão implementadas, o que poderia ser feito com um middleware ou funções específicas que formatem essas respostas.
 
 ---
 
-### 2. Mensagens de Erro Personalizadas para Argumentos Inválidos
+## 4. Como Avançar para Resolver os Bônus? 💡
 
-Você já faz um ótimo trabalho retornando mensagens claras, como:
+### a) Endpoint para buscar agente responsável por um caso
 
-```js
-res.status(400).json({message: "Campo(s) inválido(s)"})
-```
-
-Mas os testes bônus pedem que essas mensagens sejam ainda mais detalhadas e específicas, por exemplo, indicando exatamente quais campos estão incorretos ou ausentes.
-
-Para isso, você pode aprimorar sua classe `Validator` para armazenar quais campos falharam na validação e retornar algo como:
-
-```json
-{
-  "message": "Campos inválidos: dataDeIncorporacao, cargo"
-}
-```
-
-Isso ajuda o cliente da API a corrigir os dados com mais facilidade.
-
-- Para aprender mais sobre boas práticas em mensagens de erro, recomendo este artigo da MDN:  
-👉 https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/400
-
----
-
-### 3. Endpoint para Buscar o Agente Responsável por um Caso
-
-Um dos bônus falhou porque não encontrei no seu código nenhuma rota ou método que retorne o agente responsável por um caso específico.
-
-Para implementar isso, você poderia criar uma rota nova, por exemplo:
+Você pode criar uma rota como:
 
 ```js
 // Em routes/casosRoutes.js
-router.get("/casos/:id/agente", casosController.getAgenteByCasoId);
+router.get("/casos/:id/agente", casosController.getAgenteDoCaso);
 ```
 
-E no seu controller `casosController.js`:
+E no controller:
 
 ```js
-getAgenteByCasoId: (req, res) => {
-    const { id } = req.params;
-    const caso = casosRepository.findById(id);
-    if (!caso) {
-        return res.status(404).json({ message: "Caso não encontrado" });
-    }
-    const agente = agentesRepository.findById(caso.agente_id);
-    if (!agente) {
-        return res.status(404).json({ message: "Agente responsável não encontrado" });
-    }
-    return res.json(agente);
+// Em controllers/casosController.js
+getAgenteDoCaso: (req, res) => {
+  const { id } = req.params;
+  const caso = casosRepository.findById(id);
+  if (!caso) {
+    return res.status(404).json({ message: "Caso não encontrado" });
+  }
+  const agente = agentesRepository.findById(caso.agente_id);
+  if (!agente) {
+    return res.status(404).json({ message: "Agente responsável não encontrado" });
+  }
+  return res.json(agente);
 }
 ```
 
-Isso vai permitir que o cliente da API consulte qual agente está responsável por determinado caso.
+Isso vai permitir consultar o agente responsável diretamente a partir do caso.
 
 ---
 
-### 4. Pequena Dica sobre o Uso do Middleware `express.json()`
+### b) Filtragem e ordenação complexa dos agentes por data de incorporação
 
-Vi que você usou corretamente o `app.use(express.json())` no `server.js` para lidar com payloads JSON, o que é fundamental para APIs REST.
+No seu `agentesRepository.js`, você já tem um método `filterByQuery`. Para ordenar, você pode criar um método que aceita um parâmetro de ordenação:
 
-Só para reforçar, esse middleware é o que permite que `req.body` funcione como esperado quando o cliente envia dados JSON. Bom trabalho! 👏
-
-Se quiser entender mais sobre o fluxo de requisição e resposta no Express, aqui está um vídeo que pode ajudar:  
-👉 https://youtu.be/Bn8gcSQH-bc?si=Df4htGoVrV0NR7ri
-
----
-
-### 5. Organização da Estrutura de Diretórios
-
-Sua estrutura está perfeita e segue exatamente o que era esperado:
-
-```
-├── routes/
-│   ├── agentesRoutes.js
-│   └── casosRoutes.js
-├── controllers/
-│   ├── agentesController.js
-│   └── casosController.js
-├── repositories/
-│   ├── agentesRepository.js
-│   └── casosRepository.js
-├── utils/
-│   └── errorHandler.js
-├── server.js
-├── package.json
+```js
+// Exemplo simples de ordenação por dataDeIncorporacao
+sortByDate: (order = "asc") => {
+  return agentes.slice().sort((a, b) => {
+    const dateA = new Date(a.dataDeIncorporacao);
+    const dateB = new Date(b.dataDeIncorporacao);
+    return order === "asc" ? dateA - dateB : dateB - dateA;
+  });
+}
 ```
 
-Manter essa organização vai facilitar bastante a manutenção e evolução do seu projeto. Parabéns por isso! 🎯
+No controller, você pode verificar query params para `sort` e aplicar essa ordenação.
 
 ---
 
-## 💡 Resumo Rápido para Você Focar
+### c) Mensagens de erro customizadas para argumentos inválidos
 
-- [ ] **Implemente ordenação e filtros avançados no endpoint `/agentes`**, especialmente ordenação por `dataDeIncorporacao`.
-- [ ] **Aprimore as mensagens de erro para que sejam mais específicas e personalizadas**, indicando exatamente quais campos estão incorretos.
-- [ ] **Crie um endpoint para retornar o agente responsável por um caso**, completando assim a funcionalidade esperada.
-- [ ] Continue explorando boas práticas de validação e tratamento de erros para deixar sua API mais robusta e amigável.
+Ao invés de enviar mensagens genéricas, você pode melhorar o feedback ao usuário, por exemplo:
+
+```js
+if (!isAgentValid) {
+  res.status(404);
+  return res.json({
+    error: {
+      code: "AGENTE_NAO_ENCONTRADO",
+      message: "Agente não encontrado. Atribua o caso a um agente existente"
+    }
+  });
+}
+```
+
+Isso ajuda a API a ser mais amigável e clara.
 
 ---
 
-Arthur, seu projeto está muito bem feito, com código limpo, organizado e funcional! 🚀 Você já domina os conceitos essenciais de APIs RESTful com Node.js e Express, e está no caminho certo para se tornar um especialista. Continue assim, explorando os bônus e aprimorando sua API com esses detalhes que mencionei.
+## 5. Pequenos Detalhes que Você Já Mandou Bem! 👏
 
-Se quiser revisar conceitos básicos e avançados de Express e arquitetura MVC, esses vídeos são excelentes:  
-- https://youtu.be/RSZHvQomeKE  
-- https://expressjs.com/pt-br/guide/routing.html  
-- https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
+- Uso correto do `express.json()` para tratar JSON no corpo da requisição.
+- Validação dos campos com a classe `Validator` para garantir integridade dos dados.
+- Uso de `crypto.randomUUID()` para gerar IDs únicos.
+- Retorno do status 204 no DELETE, que é o correto para respostas sem conteúdo.
+- Tratamento correto para métodos PUT e PATCH, diferenciando validação completa e parcial.
 
-Qualquer dúvida, estou aqui para ajudar! 👊😄
+---
 
-Bons códigos e até a próxima! 👮‍♂️✨
+## Recursos para Você Aprofundar e Melhorar Ainda Mais 🚀
+
+- Para entender melhor como criar endpoints e organizar rotas:  
+  https://expressjs.com/pt-br/guide/routing.html  
+  (Excelente para aprender sobre `express.Router()` e modularização)
+
+- Para aprender sobre arquitetura MVC aplicada a Node.js:  
+  https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH
+
+- Para aprimorar a validação e tratamento de erros personalizados:  
+  https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_
+
+- Para entender filtros e ordenação de arrays em JavaScript:  
+  https://youtu.be/glSgUKA5LjE?si=t9G2NsC8InYAU9cI
+
+---
+
+## 🌟 Resumo Rápido para Você Focar:
+
+- [ ] Implemente endpoint para buscar o agente responsável a partir do ID do caso (ex: `/casos/:id/agente`).
+- [ ] Adicione filtros e ordenação avançada para agentes, especialmente por `dataDeIncorporacao`.
+- [ ] Melhore as mensagens de erro para serem mais personalizadas e informativas.
+- [ ] Explore o uso de middlewares para centralizar tratamento de erros e validações.
+- [ ] Continue praticando a modularização e arquitetura limpa, que você já domina muito bem!
+
+---
+
+Arthur, você está no caminho certo e tem uma base muito sólida! 🚀 Continue explorando esses detalhes extras que vão fazer sua API ficar não só funcional, mas também elegante, robusta e super profissional. Estou aqui torcendo pelo seu sucesso e pronto para ajudar quando precisar! 💪😄
+
+Um forte abraço e até a próxima revisão! 👊✨
 
 > Caso queira tirar uma dúvida específica, entre em contato com o Chapter no nosso [discord](https://discord.gg/DryuHVnz).
 
